@@ -1,0 +1,254 @@
+---
+openapi: 3.0.1
+info:
+  title: Frames and Circles API
+  version: v1
+components:
+  schemas:
+    Frame:
+      type: object
+      properties:
+        id:
+          type: integer
+        center_x:
+          type: number
+        center_y:
+          type: number
+        width:
+          type: number
+        height:
+          type: number
+        circles:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Circle"
+    Circle:
+      type: object
+      properties:
+        id:
+          type: integer
+        center_x:
+          type: number
+        center_y:
+          type: number
+        diameter:
+          type: number
+        frame_id:
+          type: integer
+    FrameWithMetrics:
+      allOf:
+      - "$ref": "#/components/schemas/Frame"
+      - type: object
+        properties:
+          metrics:
+            type: object
+            properties:
+              total_circles:
+                type: integer
+              highest:
+                type: number
+              lowest:
+                type: number
+              leftmost:
+                type: number
+              rightmost:
+                type: number
+paths:
+  "/frames":
+    post:
+      summary: Cria um novo quadro (com círculos opcionais)
+      tags:
+      - Frames
+      parameters: []
+      responses:
+        '201':
+          description: quadro criado
+        '422':
+          description: erro de validação
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                frame:
+                  type: object
+                  properties:
+                    center_x:
+                      type: number
+                      example: 50
+                    center_y:
+                      type: number
+                      example: 50
+                    width:
+                      type: number
+                      example: 100
+                    height:
+                      type: number
+                      example: 100
+                    circles_attributes:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          center_x:
+                            type: number
+                            example: 60
+                          center_y:
+                            type: number
+                            example: 60
+                          diameter:
+                            type: number
+                            example: 20
+                  required:
+                  - center_x
+                  - center_y
+                  - width
+                  - height
+  "/frames/{frame_id}/circles":
+    post:
+      summary: Adiciona um círculo ao quadro
+      tags:
+      - Circles
+      parameters:
+      - name: frame_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: círculo criado
+        '422':
+          description: erro de validação
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                center_x:
+                  type: number
+                  example: 60
+                center_y:
+                  type: number
+                  example: 60
+                diameter:
+                  type: number
+                  example: 20
+              required:
+              - center_x
+              - center_y
+              - diameter
+  "/circles/{id}":
+    put:
+      summary: Atualiza um círculo
+      tags:
+      - Circles
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: círculo atualizado
+        '422':
+          description: erro de validação
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                center_x:
+                  type: number
+                  example: 70
+                center_y:
+                  type: number
+                  example: 70
+    delete:
+      summary: Remove um círculo
+      tags:
+      - Circles
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: círculo removido
+        '404':
+          description: círculo não encontrado
+  "/circles":
+    get:
+      summary: Lista círculos por raio e quadro
+      tags:
+      - Circles
+      parameters:
+      - name: center_x
+        in: query
+        schema:
+          type: number
+      - name: center_y
+        in: query
+        schema:
+          type: number
+      - name: radius
+        in: query
+        schema:
+          type: number
+      - name: frame_id
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: lista de círculos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Circle"
+  "/frames/{id}":
+    get:
+      summary: Detalhes do quadro e métricas dos círculos
+      tags:
+      - Frames
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: detalhes do quadro
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/FrameWithMetrics"
+    delete:
+      summary: Remove um quadro (se não houver círculos associados)
+      tags:
+      - Frames
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: quadro removido
+        '422':
+          description: quadro possui círculos associados
+        '404':
+          description: quadro não encontrado
+servers:
+- url: http://localhost:3000
+  variables: {}

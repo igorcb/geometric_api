@@ -1,0 +1,65 @@
+### Criar quadro
+POST http://localhost:3000/frames
+Content-Type: application/json
+
+{
+  "frame": {
+    "center_x": 50,
+    "center_y": 50,
+    "width": 100,
+    "height": 100,
+    "circles_attributes": [
+      { "center_x": 60, "center_y": 60, "diameter": 20 }
+    ]
+  }
+}
+
+### Adicionar círculo ao quadro
+POST http://localhost:3000/frames/61/circles
+Content-Type: application/json
+
+{
+  "circle": {
+    "center_x": 91,
+    "center_y": 91,
+    "diameter": 10
+  }
+}
+
+### Atualizar círculo
+PUT http://localhost:3000/circles/52
+Content-Type: application/json
+
+{
+  "circle": {
+    "center_x": 80,
+    "center_y": 80
+  }
+}
+  
+### Atualizar círculo inexistente
+PUT http://localhost:3000/circles/9999999
+Content-Type: application/json
+
+{
+  "error": "Circle not found"
+}
+
+### Listar círculos por raio
+GET http://localhost:3000/circles?center_x=80&center_y=80&radius=10
+
+### Detalhes do quadro
+GET http://localhost:3000/frames/61
+
+### Remover círculo
+DELETE http://localhost:3000/circles/51
+
+### Remover círculo inexistente
+DELETE http://localhost:3000/circles/9999999
+
+{
+  "error": "Circle not found"
+}
+
+### Remover quadro
+DELETE http://localhost:3000/frames/61
