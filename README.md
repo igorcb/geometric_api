@@ -36,6 +36,8 @@ API para gerenciamento de quadros e círculos com validações geométricas, des
 	```sh
 	docker compose up -d db
 	docker compose up -d web
+	ou
+    docker compose up -d
 	```
 4. Crie e migre o banco:
 	```sh
