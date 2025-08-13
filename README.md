@@ -25,7 +25,7 @@ API para gerenciamento de quadros e círculos com validações geométricas, des
 ### Passos
 1. Clone o repositório:
 	```sh
-	git clone <repo-url>
+	git clone git@github.com:igorcb/geometric_api.git
 	cd geometric_api
 	```
 2. Construa os containers:
