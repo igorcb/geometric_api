@@ -8,8 +8,8 @@ services:
       POSTGRES_DB: geometric_api_development
     ports:
       - '5436:5432'
-    # volumes removido para evitar problemas de permissão e facilitar desenvolvimento
-    user: "999:999"
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
 
   web:
     build: .

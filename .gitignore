@@ -29,6 +29,9 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
+# Ignore database volume
+/db_data/
+
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 .byebug_history
