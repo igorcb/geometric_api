@@ -44,7 +44,7 @@ API para gerenciamento de quadros e círculos com validações geométricas, des
 	```
 5. Rode os testes:
 	```sh
-	docker compose run --rm web bundle exec rspec
+	docker compose run --rm -e RAILS_ENV=test web bundle exec rspec spec/
 	```
 6. Acesse a aplicação:
 	- API: [http://localhost:3000](http://localhost:3000)
